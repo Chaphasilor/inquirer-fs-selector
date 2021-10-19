@@ -1,6 +1,6 @@
 {
   "name": "inquirer-fs-selector",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A filesystem prompt selector for Inquirer.js",
   "main": "index.js",
   "engines": {
