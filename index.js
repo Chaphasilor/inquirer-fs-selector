@@ -90,6 +90,8 @@ class FSPrompt extends Base {
 
       if (typeof options.icons === 'object') {
         Object.assign(this.opt.icons, options.icons);
+      } else if (options.icons === false) {
+        this.opt.icons = false
       }
     }
 
