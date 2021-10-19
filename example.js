@@ -17,14 +17,15 @@ inquirer.prompt([{
     displayHidden: true,
     displayFiles: true,
     // ------- features -------
-    showItem: (isDirectory, isFile, fullPath) => !isFile,
     canSelectFile: true,
+    /*
     icons: {
       currentDir: '\u{1F4C2}',
-      // dir: '\u{1F4C1}',
-      // file: '\u{1F4C4}',
+      dir: '\u{1F4C1}',
+      file: '\u{1F4C4}',
     },
-    // icons: false, // not show icons
+    */
+    // showItem: (isDirectory, isFile, fullPath) => !isFile,
   }
 }]).then(function(answers) {
   console.log(answers.fs)

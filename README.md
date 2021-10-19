@@ -39,7 +39,7 @@ This prompt is anonymous, meaning you can register this prompt with the type nam
 inquirer.registerPrompt('fs-selector', require('inquirer-fs-selector'));
 inquirer.prompt({
   type: 'fs-selector',
-  ...
+  // ...
 })
 ```
 
@@ -62,9 +62,9 @@ An object with the following shape
 
 ```typescript
 {
-  isDirectory: Boolean,
-  isFile: Boolean,
-  path: String // path to selected file or directory
+  isDirectory: Boolean
+  isFile: Boolean
+  path: String // path to selected file/directory
 }
 ```
 
@@ -83,8 +83,13 @@ inquirer.prompt([{
     displayHidden: true,
     displayFiles: true,
     canSelectFile: true,
-    icons: false, // Do not show icons
-    showItem: (isDir, isFile, path) => true,
+    icons: {
+      currentDir: '\u{1F4C2}',
+      // dir: '\u{1F4C1}',
+      // file: '\u{1F4C4}',
+    },
+    // icons: false, // Do not display icons
+    showItem: (isDir, isFile, path) => true, // display file/directory
   }
 }]).then((answers) => {
   console.log(answers.fs)
