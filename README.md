@@ -83,7 +83,8 @@ inquirer.prompt([{
     displayHidden: true,
     displayFiles: true,
     canSelectFile: true,
-    icons: false, // not show icons
+    icons: false, // Do not show icons
+    showItem: (isDir, isFile, path) => true,
   }
 }]).then((answers) => {
   console.log(answers.fs)
@@ -103,8 +104,9 @@ See also [example.js](./example.js) for a working example.
 `icons.currentDir` | `'\u{1F4C2}'` (📂) | Set an icon for current directory
 `icons.dir` | `'\u{1F4C1}'` (📁) | Set an icon for other directories
 `icons.file` | `'\u{1F4C4}'` (📄) | Set an icon for files
+`showItem` | `undefined` (same as passing `() => true`) | A callback function with the following signature: `(isDirectory: boolean, isFile: boolean, fullPath: string) => boolean`. Should return `true` to prompt the item on the list
 
-To disable prompt **icons**, make `icons === false`.
+**TIP**: To disable prompt icons, make `icons === false`.
 
 ## License
 

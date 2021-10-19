@@ -17,6 +17,7 @@ inquirer.prompt([{
     displayHidden: true,
     displayFiles: true,
     // ------- features -------
+    showItem: (isDirectory, isFile, fullPath) => !isFile,
     canSelectFile: true,
     icons: {
       currentDir: '\u{1F4C2}',

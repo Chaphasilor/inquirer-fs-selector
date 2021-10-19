@@ -82,11 +82,13 @@ class FSPrompt extends Base {
     this.opt.displayHidden = false;
     this.opt.canSelectFile = true;
     this.opt.icons = defaultIcons;
+    this.opt.showItem = undefined;
 
     if (typeof options === 'object') {
       this.opt.displayFiles = getIfHasExpectedType(options.displayFiles, 'boolean', this.opt.displayFiles);
       this.opt.displayHidden = getIfHasExpectedType(options.displayHidden, 'boolean', this.opt.displayHidden);
       this.opt.canSelectFile = getIfHasExpectedType(options.canSelectFile, 'boolean', this.opt.canSelectFile);
+      this.opt.showItem = getIfHasExpectedType(options.showItem, 'function', this.opt.showItem);
 
       if (typeof options.icons === 'object') {
         Object.assign(this.opt.icons, options.icons);
@@ -403,7 +405,7 @@ class FSPrompt extends Base {
    */
   createChoices(basePath /*: ?string */) /*: Array<string> */ {
     basePath = basePath || this.currentPath;
-    const directoryContent = getDirectoryContent(basePath, this.opt.displayHidden, this.opt.displayFiles);
+    const directoryContent = getDirectoryContent(basePath, this.opt.displayHidden, this.opt.displayFiles, this.opt.showItem);
 
     if (basePath !== this.root) {
       directoryContent.unshift(BACK);
@@ -482,25 +484,31 @@ function listRender(
 function getDirectoryContent(
   basePath /*: string */,
   includeHidden /*: ?boolean */,
-  includeFiles /*: ?boolean */) /*: Array<string> */ {
+  includeFiles /*: ?boolean */,
+  shouldIncludeFile /*: ?function */
+) /*: Array<string> */ {
 
   return fs
     .readdirSync(basePath)
     .filter((file) => {
       try {
-        const stats = fs.lstatSync( path.join(basePath, file) );
+        const fullPath = path.join(basePath, file);
+        const stats = fs.lstatSync(fullPath);
         if (stats.isSymbolicLink()) {
           return false;
         }
 
         const isDir = stats.isDirectory();
         const isFile = stats.isFile() && includeFiles;
+        const isValidItem = (isDir || isFile) &&
+          shouldIncludeFile ? shouldIncludeFile(isDir, isFile, fullPath) : true;
+
         if (includeHidden) {
-          return isDir || includeFiles;
+          return isValidItem;
         }
 
         const isNotDotFile = path.basename(file).indexOf('.') !== 0;
-        return (isDir || isFile) && isNotDotFile;
+        return isValidItem && isNotDotFile;
       } catch (err) {
         return false;
       }
